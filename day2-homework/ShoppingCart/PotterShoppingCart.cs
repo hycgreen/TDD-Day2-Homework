@@ -30,6 +30,7 @@ namespace ShoppingCart
                         if (group.Where(p => p.Name == product.Name).ToList().Count() == 0)
                         {
                             group.Add(product);
+                            temp = null;
                             break;
                         }
                         else
