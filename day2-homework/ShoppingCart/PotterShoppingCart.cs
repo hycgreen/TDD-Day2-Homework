@@ -13,9 +13,21 @@ namespace ShoppingCart
 
         public double Sum(IEnumerable<Product> products)
         {
+            //商品分組
+            List<List<Product>> productGroups = GetProductGroups(products);
+
+            //取得折扣
+            SetDiscount(productGroups);
+
+            var totalAmount = products.Sum(p => p.Price * p.Discount);
+
+            return totalAmount;
+        }
+
+        private List<List<Product>> GetProductGroups(IEnumerable<Product> products)
+        {
             List<List<Product>> productGroups = new List<List<Product>>();
 
-            //商品分組
             foreach (var product in products)
             {
                 if (productGroups.Count == 0)
@@ -46,19 +58,19 @@ namespace ShoppingCart
                 }
             }
 
-            //取得折扣
-            foreach(var group in productGroups)
+            return productGroups;
+        }
+
+        private void SetDiscount(List<List<Product>> productGroups)
+        {
+            foreach (var group in productGroups)
             {
                 double discount = GetDisCount(group.Count());
-                foreach(var product in group)
+                foreach (var product in group)
                 {
                     product.Discount = discount;
                 }
             }
-
-            var totalAmount = products.Sum(p => p.Price * p.Discount);
-
-            return totalAmount;
         }
 
         private double GetDisCount(int volumeCount)
