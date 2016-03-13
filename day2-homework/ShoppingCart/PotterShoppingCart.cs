@@ -13,31 +13,77 @@ namespace ShoppingCart
 
         public double Sum(IEnumerable<Product> products)
         {
-            var potterVolCount = products.GroupBy(p => p.Name).Count();
+            List<List<Product>> productGroups = new List<List<Product>>();
 
-            double discount = 1;
-            switch (potterVolCount)
+            //商品分組
+            foreach (var product in products)
+            {
+                if (productGroups.Count == 0)
+                {
+                    productGroups.Add(new List<Product>() { product });
+                }
+                else
+                {
+                    List<Product> temp = null;
+                    foreach (var group in productGroups)
+                    {
+                        if (group.Where(p => p.Name == product.Name).ToList().Count() == 0)
+                        {
+                            group.Add(product);
+                            break;
+                        }
+                        else
+                        {
+                            temp = new List<Product>() { product };
+                        }
+                    }
+
+                    if (temp != null)
+                    {
+                        productGroups.Add(temp);
+                    }
+                }
+            }
+
+            //取得折扣
+            foreach(var group in productGroups)
+            {
+                double discount = GetDisCount(group.Count());
+                foreach(var product in group)
+                {
+                    product.Discount = discount;
+                }
+            }
+
+            var totalAmount = products.Sum(p => p.Price * p.Discount);
+
+            return totalAmount;
+        }
+
+        private double GetDisCount(int volumeCount)
+        {
+            switch (volumeCount)
             {
                 case 2:
-                    discount = 0.95;
+                    return 0.95;
                     break;
 
                 case 3:
-                    discount = 0.9;
+                    return 0.9;
                     break;
 
                 case 4:
-                    discount = 0.8;
+                    return 0.8;
                     break;
 
                 case 5:
-                    discount = 0.75;
+                    return 0.75;
+                    break;
+
+                default:
+                    return 1;
                     break;
             }
-
-            var totalAmount = products.Sum(p => p.Price * discount);
-
-            return totalAmount;
         }
     }
 }
