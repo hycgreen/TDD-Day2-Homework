@@ -20,6 +20,10 @@ namespace ShoppingCart
             {
                 discount = 0.95;
             }
+            else if (potterVolCount == 3)
+            {
+                discount = 0.9;
+            }
 
             var totalAmount = products.Sum(p => p.Price * discount);
 
