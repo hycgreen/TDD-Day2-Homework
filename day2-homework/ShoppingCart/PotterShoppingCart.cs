@@ -13,7 +13,15 @@ namespace ShoppingCart
 
         public double Sum(IEnumerable<Product> products)
         {
-            var totalAmount = products.ToList().Sum(p => p.Price);
+            var potterVolCount = products.GroupBy(p => p.Name).Count();
+
+            double discount = 1;
+            if (potterVolCount == 2)
+            {
+                discount = 0.95;
+            }
+
+            var totalAmount = products.Sum(p => p.Price * discount);
 
             return totalAmount;
         }
