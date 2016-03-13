@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ShoppingCart
 {
@@ -12,7 +13,9 @@ namespace ShoppingCart
 
         public double Sum(IEnumerable<Product> products)
         {
-            throw new NotImplementedException();
+            var totalAmount = products.ToList().Sum(p => p.Price);
+
+            return totalAmount;
         }
     }
 }
