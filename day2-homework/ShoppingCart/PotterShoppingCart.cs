@@ -16,13 +16,19 @@ namespace ShoppingCart
             var potterVolCount = products.GroupBy(p => p.Name).Count();
 
             double discount = 1;
-            if (potterVolCount == 2)
+            switch (potterVolCount)
             {
-                discount = 0.95;
-            }
-            else if (potterVolCount == 3)
-            {
-                discount = 0.9;
+                case 2:
+                    discount = 0.95;
+                    break;
+
+                case 3:
+                    discount = 0.9;
+                    break;
+
+                case 4:
+                    discount = 0.8;
+                    break;
             }
 
             var totalAmount = products.Sum(p => p.Price * discount);
